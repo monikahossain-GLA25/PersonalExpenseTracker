@@ -1,0 +1,74 @@
+﻿using PersonalExpenseTracker.Models;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace PersonalExpenseTracker.Services
+{
+    public class ExpenseService
+    {
+        private readonly List<Expense> _expenses = new();
+
+      
+        public void AddExpense(Expense expense)
+        {
+            
+            if(String.IsNullOrWhiteSpace(expense.Title))
+            {
+                Console.WriteLine("Expenditures title cannot be empty.It must have some values.");
+                return;
+            }
+
+            if (expense.Amount <= 0)
+            {
+                Console.WriteLine("Expenditures amount must be a positive value.Negative value is not accepted");
+                return;
+            }
+
+            _expenses.Add(expense);
+
+            Console.WriteLine("Expense added successfully.");
+
+        }
+
+        
+        public List<Expense> GetAllExpenses()
+        {
+            return _expenses;
+        }
+        public int GetExpenseCount()
+        {
+            return _expenses.Count;
+        }
+
+        public decimal CalculateTotalExpense()
+        {
+            decimal total = 0;
+
+            foreach (Expense expense in _expenses)
+            {
+                total = total + expense.Amount;
+            }
+
+            return total;
+        }
+        public void DisplayAllExpenses()
+        {
+            if (_expenses.Count == 0)
+            {
+                Console.WriteLine("No Expenditures found in the list .");
+                return;
+            }
+
+            foreach (Expense expense in _expenses)
+            {
+                Console.WriteLine(
+                    $"{expense.Id} | " +
+                    $"{expense.Title} | " +
+                    $"{expense.Amount:F2} | " +
+                    $"{expense.Category} | " +
+                    $"{expense.ExpenseDate:dd MMM yyyy}");
+            }
+        }
+    }
+}
