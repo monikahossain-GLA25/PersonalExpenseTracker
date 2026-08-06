@@ -2,6 +2,7 @@
 using PersonalExpenseTracker.Models;
 
 using PersonalExpenseTracker.Services;
+using PersonalExpenseTracker.UI;
 public class Program
 {
     public static void Main(string[] args)
@@ -43,5 +44,19 @@ public class Program
 
 
         Console.WriteLine($"Total amount: {totalExpense:F2}");
+
+
+
+
+
+
+        ExpenseMenu objExpenseMenu = new ExpenseMenu(expenseService);
+
+
+        objExpenseMenu.ShowMenu();
+
+
+
+
     }
 }
