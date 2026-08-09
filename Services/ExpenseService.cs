@@ -9,7 +9,11 @@ namespace PersonalExpenseTracker.Services
     {
         private readonly List<Expense> _expenses = new();
 
-      
+        private int _nextId = 1;
+        public int GetNextId()
+        {
+            return _nextId++;
+        }
         public void AddExpense(Expense expense)
         {
             
