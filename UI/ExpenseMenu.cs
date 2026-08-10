@@ -56,8 +56,7 @@ namespace PersonalExpenseTracker.UI
                         break;
 
                     case "4":
-                        // Update
-                        Console.WriteLine("Update Expense selected");
+                        UpdateExpense();
                         break;
 
                     case "5":
@@ -203,9 +202,99 @@ namespace PersonalExpenseTracker.UI
             }
         }
 
+        private int ReadPositiveInteger(
+    string message)
+        {
+            while (true)
+            {
+                Console.Write(message);
 
+                string? input =
+                    Console.ReadLine();
 
+                if (int.TryParse(
+                        input,
+                        out int number)
+                    &&
+                    number > 0)
+                {
+                    return number;
+                }
 
+                Console.WriteLine(
+                    "Please enter a valid positive number.");
+            }
+        }
+
+        private void UpdateExpense()
+        {
+            Console.WriteLine();
+            Console.WriteLine("--- UPDATE EXPENSE ---");
+
+            int id = ReadPositiveInteger(
+                "Enter expense ID: ");
+
+            Expense? expense =
+                _expenseService.GetById(id);
+
+            if (expense == null)
+            {
+                Console.WriteLine(
+                    "Expense not found.");
+
+                return;
+            }
+
+            Console.WriteLine(
+                $"Current Title: {expense.Title}");
+
+            Console.Write("New Title: ");
+            string? title =
+                Console.ReadLine();
+
+            if (string.IsNullOrWhiteSpace(title))
+            {
+                Console.WriteLine(
+                    "Title cannot be empty.");
+
+                return;
+            }
+
+            decimal amount =
+                ReadPositiveAmount();
+
+            ExpenseCategory category =
+                ReadCategory();
+
+            DateTime expenseDate =
+                ReadExpenseDate();
+
+            Console.Write(
+                "New Note (optional): ");
+
+            string? note =
+                Console.ReadLine();
+
+            bool updated =
+                _expenseService.UpdateExpense(
+                    id,
+                    title,
+                    amount,
+                    category,
+                    expenseDate,
+                    note);
+
+            if (updated)
+            {
+                Console.WriteLine(
+                    "Expense updated successfully.");
+            }
+            else
+            {
+                Console.WriteLine(
+                    "Expense could not be updated.");
+            }
+        }
         private decimal ReadPositiveAmount()
         {
             while (true)
