@@ -1,4 +1,7 @@
-﻿using PersonalExpenseTracker.Models;
+﻿using PersonalExpenseTracker.Enums;
+
+using System.Linq;
+using PersonalExpenseTracker.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -73,6 +76,13 @@ namespace PersonalExpenseTracker.Services
                     $"{expense.Category} | " +
                     $"{expense.ExpenseDate:dd MMM yyyy}");
             }
+        }
+        public IEnumerable<Expense> GetByCategory(
+    ExpenseCategory category)
+        {
+            return _expenses.Where(
+                expense =>
+                    expense.Category == category);
         }
     }
 }

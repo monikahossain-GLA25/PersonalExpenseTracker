@@ -48,13 +48,11 @@ namespace PersonalExpenseTracker.UI
                     //    break;
 
                     case "2":
-                        // View expenses
-                        Console.WriteLine("View Expense selected");
+                        ViewAllExpenses();
                         break;
 
                     case "3":
-                        // Search
-                        Console.WriteLine("Search Expense selected");
+                        SearchByCategory();
                         break;
 
                     case "4":
@@ -131,6 +129,83 @@ namespace PersonalExpenseTracker.UI
             // 8. Add
             _expenseService.AddExpense(expense);
         }
+        private void ViewAllExpenses()
+        {
+            List<Expense> expenses =
+                _expenseService.GetAllExpenses();
+
+            Console.WriteLine();
+            Console.WriteLine("--- ALL EXPENSES ---");
+
+            if (expenses.Count == 0)
+            {
+                Console.WriteLine(
+                    "No expenses found.");
+
+                return;
+            }
+
+            foreach (Expense expense in expenses)
+            {
+                Console.WriteLine(
+                    $"ID: {expense.Id}");
+
+                Console.WriteLine(
+                    $"Title: {expense.Title}");
+
+                Console.WriteLine(
+                    $"Amount: {expense.Amount:F2}");
+
+                Console.WriteLine(
+                    $"Category: {expense.Category}");
+
+                Console.WriteLine(
+                    $"Date: " +
+                    $"{expense.ExpenseDate:dd MMM yyyy}");
+
+                Console.WriteLine(
+                    $"Note: {expense.Note ?? "No note"}");
+
+                Console.WriteLine(
+                    "------------------------------");
+            }
+        }
+
+        private void SearchByCategory()
+        {
+            Console.WriteLine();
+            Console.WriteLine(
+                "--- SEARCH BY CATEGORY ---");
+
+            ExpenseCategory category =
+                ReadCategory();
+
+            List<Expense> expenses =
+                _expenseService
+                    .GetByCategory(category)
+                    .ToList();
+
+            if (expenses.Count == 0)
+            {
+                Console.WriteLine(
+                    "No expenses found in this category.");
+
+                return;
+            }
+
+            foreach (Expense expense in expenses)
+            {
+                Console.WriteLine(
+                    $"{expense.Id} | " +
+                    $"{expense.Title} | " +
+                    $"{expense.Amount:F2} | " +
+                    $"{expense.ExpenseDate:dd MMM yyyy}");
+            }
+        }
+
+
+
+
         private decimal ReadPositiveAmount()
         {
             while (true)
