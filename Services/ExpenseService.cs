@@ -84,5 +84,48 @@ namespace PersonalExpenseTracker.Services
                 expense =>
                     expense.Category == category);
         }
+        public Expense? GetById(int id)
+        {
+            return _expenses.FirstOrDefault(
+                expense => expense.Id == id);
+        }
+        public bool UpdateExpense(
+    int id,
+    string title,
+    decimal amount,
+    ExpenseCategory category,
+    DateTime expenseDate,
+    string? note)
+        {
+            Expense? expense =
+                GetById(id);
+
+            if (expense == null)
+            {
+                return false;
+            }
+
+            expense.Title = title;
+            expense.Amount = amount;
+            expense.Category = category;
+            expense.ExpenseDate = expenseDate;
+            expense.Note = note;
+
+            return true;
+        }
+        public bool DeleteExpense(int id)
+        {
+            Expense? expense =
+                GetById(id);
+
+            if (expense == null)
+            {
+                return false;
+            }
+
+            _expenses.Remove(expense);
+
+            return true;
+        }
     }
 }
