@@ -90,12 +90,12 @@ namespace PersonalExpenseTracker.Services
                 expense => expense.Id == id);
         }
         public bool UpdateExpense(
-    int id,
-    string title,
-    decimal amount,
-    ExpenseCategory category,
-    DateTime expenseDate,
-    string? note)
+                int id,
+                string title,
+                decimal amount,
+                ExpenseCategory category,
+                DateTime expenseDate,
+                string? note)
         {
             Expense? expense =
                 GetById(id);
@@ -127,5 +127,7 @@ namespace PersonalExpenseTracker.Services
 
             return true;
         }
+
+        
     }
 }

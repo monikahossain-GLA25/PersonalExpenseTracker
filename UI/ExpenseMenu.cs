@@ -66,10 +66,13 @@ namespace PersonalExpenseTracker.UI
 
                     case "6":
                         // Total
-                        Console.WriteLine("Total Expense selected");
+                        ShowTotalExpense();
                         break;
 
                     case "0":
+                        Console.WriteLine(
+                            "Thank you for using Personal Expense Tracker.");
+
                         running = false;
                         break;
 
@@ -418,6 +421,16 @@ namespace PersonalExpenseTracker.UI
                 Console.WriteLine(
                     "Invalid date. Please try again.");
             }
+        }
+
+        private void ShowTotalExpense()
+        {
+            decimal total =
+                _expenseService.CalculateTotalExpense();
+
+            Console.WriteLine();
+            Console.WriteLine(
+                $"Total Expense: {total:F2}");
         }
     }
 }
