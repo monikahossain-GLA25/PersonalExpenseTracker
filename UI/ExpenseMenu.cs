@@ -129,7 +129,19 @@ namespace PersonalExpenseTracker.UI
             );
 
             // 8. Add
-            _expenseService.AddExpense(expense);
+            bool added =
+     _expenseService.AddExpense(expense);
+
+            if (added)
+            {
+                Console.WriteLine(
+                    "Expense added successfully.");
+            }
+            else
+            {
+                Console.WriteLine(
+                    "Expense could not be added.");
+            }
         }
         private void ViewAllExpenses()
         {

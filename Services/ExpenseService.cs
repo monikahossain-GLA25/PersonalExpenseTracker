@@ -17,28 +17,24 @@ namespace PersonalExpenseTracker.Services
         {
             return _nextId++;
         }
-        public void AddExpense(Expense expense)
+        public bool AddExpense(Expense expense)
         {
-            
-            if(String.IsNullOrWhiteSpace(expense.Title))
+            if (string.IsNullOrWhiteSpace(expense.Title))
             {
-                Console.WriteLine("Expenditures title cannot be empty.It must have some values.");
-                return;
+                return false;
             }
 
             if (expense.Amount <= 0)
             {
-                Console.WriteLine("Expenditures amount must be a positive value.Negative value is not accepted");
-                return;
+                return false;
             }
 
             _expenses.Add(expense);
 
-            Console.WriteLine("Expense added successfully.");
-
+            return true;
         }
 
-        
+
         public List<Expense> GetAllExpenses()
         {
             return _expenses;
@@ -59,24 +55,7 @@ namespace PersonalExpenseTracker.Services
 
             return total;
         }
-        public void DisplayAllExpenses()
-        {
-            if (_expenses.Count == 0)
-            {
-                Console.WriteLine("No Expenditures found in the list .");
-                return;
-            }
-
-            foreach (Expense expense in _expenses)
-            {
-                Console.WriteLine(
-                    $"{expense.Id} | " +
-                    $"{expense.Title} | " +
-                    $"{expense.Amount:F2} | " +
-                    $"{expense.Category} | " +
-                    $"{expense.ExpenseDate:dd MMM yyyy}");
-            }
-        }
+        
         public IEnumerable<Expense> GetByCategory(
     ExpenseCategory category)
         {
