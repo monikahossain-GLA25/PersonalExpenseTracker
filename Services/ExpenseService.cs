@@ -17,28 +17,24 @@ namespace PersonalExpenseTracker.Services
         {
             return _nextId++;
         }
-        public void AddExpense(Expense expense)
+        public bool AddExpense(Expense expense)
         {
-            
-            if(String.IsNullOrWhiteSpace(expense.Title))
+            if (string.IsNullOrWhiteSpace(expense.Title))
             {
-                Console.WriteLine("Expenditures title cannot be empty.It must have some values.");
-                return;
+                return false;
             }
 
             if (expense.Amount <= 0)
             {
-                Console.WriteLine("Expenditures amount must be a positive value.Negative value is not accepted");
-                return;
+                return false;
             }
 
             _expenses.Add(expense);
 
-            Console.WriteLine("Expense added successfully.");
-
+            return true;
         }
 
-        
+
         public List<Expense> GetAllExpenses()
         {
             return _expenses;
@@ -50,33 +46,10 @@ namespace PersonalExpenseTracker.Services
 
         public decimal CalculateTotalExpense()
         {
-            decimal total = 0;
-
-            foreach (Expense expense in _expenses)
-            {
-                total = total + expense.Amount;
-            }
-
-            return total;
+            return _expenses.Sum(
+                expense => expense.Amount);
         }
-        public void DisplayAllExpenses()
-        {
-            if (_expenses.Count == 0)
-            {
-                Console.WriteLine("No Expenditures found in the list .");
-                return;
-            }
 
-            foreach (Expense expense in _expenses)
-            {
-                Console.WriteLine(
-                    $"{expense.Id} | " +
-                    $"{expense.Title} | " +
-                    $"{expense.Amount:F2} | " +
-                    $"{expense.Category} | " +
-                    $"{expense.ExpenseDate:dd MMM yyyy}");
-            }
-        }
         public IEnumerable<Expense> GetByCategory(
     ExpenseCategory category)
         {
@@ -128,6 +101,66 @@ namespace PersonalExpenseTracker.Services
             return true;
         }
 
-        
+
+
+
+        public List<Expense> GetExpensesSortedByAmount(
+    bool descending)
+        {
+            if (descending)
+            {
+                return _expenses
+                    .OrderByDescending(
+                        expense => expense.Amount)
+                    .ToList();
+            }
+
+            return _expenses
+                .OrderBy(
+                    expense => expense.Amount)
+                .ToList();
+        }
+        public List<Expense> GetExpensesSortedByDate(
+    bool descending)
+        {
+            if (descending)
+            {
+                return _expenses
+                    .OrderByDescending(
+                        expense => expense.ExpenseDate)
+                    .ToList();
+            }
+
+            return _expenses
+                .OrderBy(
+                    expense => expense.ExpenseDate)
+                .ToList();
+        }
+
+
+        public Dictionary<ExpenseCategory, decimal>
+    GetCategorySummary()
+        {
+            return _expenses
+                .GroupBy(
+                    expense => expense.Category)
+                .ToDictionary(
+                    group => group.Key,
+                    group => group.Sum(
+                        expense => expense.Amount));
+        }
+
+        public List<Expense> GetMonthlyExpenses(
+    int year,
+    int month)
+        {
+            return _expenses
+                .Where(
+                    expense =>
+                        expense.ExpenseDate.Year == year
+                        &&
+                        expense.ExpenseDate.Month == month)
+                .ToList();
+        }
     }
 }

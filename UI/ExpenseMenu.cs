@@ -69,12 +69,33 @@ namespace PersonalExpenseTracker.UI
                         ShowTotalExpense();
                         break;
 
+
+
+
+
+
+                    case "7":
+                        SortExpenses();
+                        break;
+
+                    case "8":
+                        ShowCategorySummary();
+                        break;
+
+                    case "9":
+                        ShowMonthlySummary();
+                        break;
+
                     case "0":
                         Console.WriteLine(
                             "Thank you for using Personal Expense Tracker.");
 
                         running = false;
                         break;
+
+
+
+                   
 
                     default:
                         Console.WriteLine("Invalid option.");
@@ -129,7 +150,19 @@ namespace PersonalExpenseTracker.UI
             );
 
             // 8. Add
-            _expenseService.AddExpense(expense);
+            bool added =
+     _expenseService.AddExpense(expense);
+
+            if (added)
+            {
+                Console.WriteLine(
+                    "Expense added successfully.");
+            }
+            else
+            {
+                Console.WriteLine(
+                    "Expense could not be added.");
+            }
         }
         private void ViewAllExpenses()
         {
@@ -431,6 +464,173 @@ namespace PersonalExpenseTracker.UI
             Console.WriteLine();
             Console.WriteLine(
                 $"Total Expense: {total:F2}");
+        }
+
+
+        //newly i add 
+        private void SortExpenses()
+        {
+            Console.WriteLine();
+            Console.WriteLine("--- SORT EXPENSES ---");
+
+            Console.WriteLine("1. Amount Low to High");
+            Console.WriteLine("2. Amount High to Low");
+            Console.WriteLine("3. Date Old to New");
+            Console.WriteLine("4. Date New to Old");
+
+            Console.Write("Choose sorting option: ");
+
+            string? choice =
+                Console.ReadLine();
+
+            List<Expense> expenses;
+
+            switch (choice)
+            {
+                case "1":
+                    expenses =
+                        _expenseService
+                            .GetExpensesSortedByAmount(false);
+                    break;
+
+                case "2":
+                    expenses =
+                        _expenseService
+                            .GetExpensesSortedByAmount(true);
+                    break;
+
+                case "3":
+                    expenses =
+                        _expenseService
+                            .GetExpensesSortedByDate(false);
+                    break;
+
+                case "4":
+                    expenses =
+                        _expenseService
+                            .GetExpensesSortedByDate(true);
+                    break;
+
+                default:
+                    Console.WriteLine(
+                        "Invalid sorting option.");
+                    return;
+            }
+
+            if (expenses.Count == 0)
+            {
+                Console.WriteLine(
+                    "No expenses available.");
+                return;
+            }
+
+            foreach (Expense expense in expenses)
+            {
+                Console.WriteLine(
+                    $"{expense.Id} | " +
+                    $"{expense.Title} | " +
+                    $"{expense.Amount:F2} | " +
+                    $"{expense.Category} | " +
+                    $"{expense.ExpenseDate:dd MMM yyyy}");
+            }
+        }
+
+        private void ShowCategorySummary()
+        {
+            Console.WriteLine();
+            Console.WriteLine(
+                "--- CATEGORY SUMMARY ---");
+
+            Dictionary<ExpenseCategory, decimal> summary =
+                _expenseService.GetCategorySummary();
+
+            if (summary.Count == 0)
+            {
+                Console.WriteLine(
+                    "No expenses found.");
+
+                return;
+            }
+
+            foreach (var item in summary)
+            {
+                Console.WriteLine(
+                    $"{item.Key,-15} : {item.Value:F2}");
+            }
+        }
+
+        private int ReadMonth()
+        {
+            while (true)
+            {
+                Console.Write(
+                    "Enter month (1-12): ");
+
+                string? input =
+                    Console.ReadLine();
+
+                if (int.TryParse(
+                        input,
+                        out int month)
+                    &&
+                    month >= 1
+                    &&
+                    month <= 12)
+                {
+                    return month;
+                }
+
+                Console.WriteLine(
+                    "Please enter a month between 1 and 12.");
+            }
+        }
+
+        private void ShowMonthlySummary()
+        {
+            Console.WriteLine();
+            Console.WriteLine(
+                "--- MONTHLY SUMMARY ---");
+
+            int year =
+                ReadPositiveInteger(
+                    "Enter year: ");
+
+            int month =
+                ReadMonth();
+
+            List<Expense> expenses =
+                _expenseService.GetMonthlyExpenses(
+                    year,
+                    month);
+
+            if (expenses.Count == 0)
+            {
+                Console.WriteLine(
+                    "No expenses found for this month.");
+
+                return;
+            }
+
+            Console.WriteLine();
+
+            foreach (Expense expense in expenses)
+            {
+                Console.WriteLine(
+                    $"{expense.ExpenseDate:dd MMM yyyy} | " +
+                    $"{expense.Title} | " +
+                    $"{expense.Category} | " +
+                    $"{expense.Amount:F2}");
+            }
+
+            decimal monthlyTotal =
+                expenses.Sum(
+                    expense => expense.Amount);
+
+            Console.WriteLine(
+                "------------------------------");
+
+            Console.WriteLine(
+                $"Monthly Total: {monthlyTotal:F2}");
         }
     }
 }
