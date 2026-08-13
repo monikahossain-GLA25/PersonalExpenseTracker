@@ -22,9 +22,8 @@ namespace PersonalExpenseTracker.UI
             while (running)
             {
                 Console.WriteLine();
-                Console.WriteLine("==============================");
+           
                 Console.WriteLine("   PERSONAL EXPENSE TRACKER");
-                Console.WriteLine("==============================");
 
                 Console.WriteLine("1. Add Expense");
                 Console.WriteLine("2. View All Expenses");
@@ -32,6 +31,9 @@ namespace PersonalExpenseTracker.UI
                 Console.WriteLine("4. Update Expense");
                 Console.WriteLine("5. Delete Expense");
                 Console.WriteLine("6. View Total Expense");
+                Console.WriteLine("7. Sort Expenses");
+                Console.WriteLine("8. Category Summary");
+                Console.WriteLine("9. Monthly Summary");
                 Console.WriteLine("0. Exit");
 
                 Console.Write("Choose an option: ");
@@ -68,9 +70,6 @@ namespace PersonalExpenseTracker.UI
                         // Total
                         ShowTotalExpense();
                         break;
-
-
-
 
 
 
